@@ -1,0 +1,20 @@
+services:
+
+  fit-bff:
+    build: .
+    container_name: fit-bff-service
+    restart: unless-stopped
+    environment:
+      MS_GESTION_URL: ${MS_GESTION_URL:-http://fit-gestion-service:8080/api/v1}
+      MS_USERS_URL: ${MS_USERS_URL:-http://fit-users-service:8090/api/v1}
+      SERVER_PORT: 8081
+      JWT_SECRET: ${JWT_SECRET:-fitproject-secret-key-must-be-at-least-32-chars-long}
+      JWT_EXPIRATION: ${JWT_EXPIRATION:-86400000}
+    ports:
+      - "8081:8081"
+    networks:
+      - fit-network
+
+networks:
+  fit-network:
+    external: true
