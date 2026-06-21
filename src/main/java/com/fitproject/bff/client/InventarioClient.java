@@ -1,5 +1,6 @@
 package com.fitproject.bff.client;
 
+import com.fitproject.bff.client.fallback.InventarioClientFallbackFactory;
 import com.fitproject.bff.dto.InsumoDTO;
 import com.fitproject.bff.dto.TransaccionDTO;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -8,7 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-@FeignClient(name = "ms-inventario", url = "${services.ms-inventario.url:http://localhost:8094/api/v1}")
+@FeignClient(
+        name = "ms-inventario",
+        url = "${services.ms-inventario.url:http://localhost:8094/api/v1}",
+        fallbackFactory = InventarioClientFallbackFactory.class
+)
 public interface InventarioClient {
 
     @GetMapping("/insumos")

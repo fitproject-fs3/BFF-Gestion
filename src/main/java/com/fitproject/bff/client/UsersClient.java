@@ -1,5 +1,6 @@
 package com.fitproject.bff.client;
 
+import com.fitproject.bff.client.fallback.UsersClientFallbackFactory;
 import com.fitproject.bff.dto.*;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -8,7 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-@FeignClient(name = "ms-users", url = "${services.ms-users.url:http://localhost:8090/api/v1}")
+@FeignClient(
+        name = "ms-users",
+        url = "${services.ms-users.url:http://localhost:8090/api/v1}",
+        fallbackFactory = UsersClientFallbackFactory.class
+)
 public interface UsersClient {
 
     @PostMapping("/users/authenticate")

@@ -1,12 +1,17 @@
 package com.fitproject.bff.client;
 
+import com.fitproject.bff.client.fallback.GestionClientFallbackFactory;
 import com.fitproject.bff.dto.*;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "ms-gestion", url = "${services.ms-gestion.url:http://localhost:8080/api/v1}")
+@FeignClient(
+        name = "ms-gestion",
+        url = "${services.ms-gestion.url:http://localhost:8080/api/v1}",
+        fallbackFactory = GestionClientFallbackFactory.class
+)
 public interface GestionClient {
 
     // ── Proyectos ──────────────────────────────────────────────────
