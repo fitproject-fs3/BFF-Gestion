@@ -11,6 +11,18 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Controller REST del BFF-Gestion que agrega KPIs para el dashboard de inversionistas y administradores.
+ *
+ * <p>Calcula en memoria los indicadores de desempeño a partir de los datos de proyectos
+ * retornados por MS-Gestion vía {@link GestionClient}. Si MS-Gestion no está disponible,
+ * el Circuit Breaker retorna una lista vacía y los KPIs reflejarán ceros.</p>
+ *
+ * <p>Base URL: {@code /api/v1/dashboard}</p>
+ *
+ * @see GestionClient
+ * @see DashboardKpiDTO
+ */
 @RestController
 @RequestMapping("/api/v1/dashboard")
 @RequiredArgsConstructor
@@ -21,6 +33,15 @@ public class DashboardController {
 
     private final GestionClient gestionClient;
 
+    /**
+     * Calcula y retorna los KPIs del ecosistema FitProject para el panel de control.
+     *
+     * <p>Indicadores calculados: proyectos totales, activos, completados, progreso promedio,
+     * evidencias pendientes/aprobadas/rechazadas, y progreso detallado por proyecto.</p>
+     *
+     * @return 200 con {@link DashboardKpiDTO} con todos los indicadores de desempeño;
+     *         KPIs en cero si MS-Gestion no está disponible (modo degradado por Circuit Breaker)
+     */
     @GetMapping("/kpis")
     public ResponseEntity<DashboardKpiDTO> getKpis() {
         log.info("Dashboard KPIs requested");
